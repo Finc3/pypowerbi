@@ -1,7 +1,7 @@
 class PowerBITestSettings:
     # default testing urls
     authority_url = 'https://login.windows.net/common'
-    resource_url = 'https://analysis.windows.net/powerbi/api'
+    scopes = ['https://analysis.windows.net/powerbi/api/.default']
     api_url = 'https://api.powerbi.com'
 
     # testing credentials

@@ -1,4 +1,4 @@
-import adal
+import msal
 from pypowerbi.dataset import Column, Table, Dataset
 from pypowerbi.client import PowerBIClient
 from Credentials import client_id, username, password

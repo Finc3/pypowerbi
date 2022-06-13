@@ -1,16 +1,16 @@
 from setuptools import setup
 
 setup(name='pypowerbi',
-      version='0.26',
+      version='0.27',
       description='A python library for Microsoft\'s PowerBI',
-      url='http://github.com/cmberryau/pypowerbi',
+      url='http://github.com/Finc3/pypowerbi',
       author='Chris Berry',
       author_email='chris@chrisberry.com.au',
       license='MIT',
       packages=['pypowerbi'],
       install_requires=[
             'requests',
-            'adal',
+            'msal',
             'future-fstrings',
       ],
       zip_safe=False)

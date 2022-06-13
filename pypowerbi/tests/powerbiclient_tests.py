@@ -1,6 +1,6 @@
 # -*- coding: future_fstrings -*-
 
-import adal
+import msal
 import datetime
 import time
 from unittest import TestCase
@@ -18,7 +18,7 @@ from pypowerbi.tests.settings import PowerBITestSettings
 class PowerBIAPITests(TestCase):
     # default testing urls
     authority_url = PowerBITestSettings.authority_url
-    resource_url = PowerBITestSettings.resource_url
+    scopes = PowerBITestSettings.scopes
     api_url = PowerBITestSettings.api_url
 
     # default testing credentials
@@ -127,12 +127,11 @@ class PowerBIAPITests(TestCase):
                                            reports[0].dataset_id, group_id)
 
     def get_token(self):
-        context = adal.AuthenticationContext(authority=self.authority_url,
+        context = msal.PublicClientApplication(authority=self.authority_url,
                                              validate_authority=True,
-                                             api_version=None)
+                                             client_id=self.client_id)
 
-        return context.acquire_token_with_username_password(resource=self.resource_url,
-                                                            client_id=self.client_id,
+        return context.acquire_token_by_username_password(scopes=self.scopes,
                                                             username=self.username,
                                                             password=self.password)
 

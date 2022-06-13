@@ -13,13 +13,13 @@ pip install pypowerbi
 ### Posting a dataset
 
 ```
-import adal
+import msal
 from pypowerbi.dataset import Column, Table, Dataset
 from pypowerbi.client import PowerBIClient
 
 # you might need to change these, but i doubt it
 authority_url = 'https://login.windows.net/common'
-resource_url = 'https://analysis.windows.net/powerbi/api'
+scopes = ['https://analysis.windows.net/powerbi/api/.default']
 api_url = 'https://api.powerbi.com'
 
 # change these to your credentials
@@ -27,14 +27,13 @@ client_id = '00000000-0000-0000-0000-000000000000'
 username = 'someone@somecompany.com'
 password = 'averygoodpassword'
 
-# first you need to authenticate using adal
-context = adal.AuthenticationContext(authority=authority_url,
+# first you need to authenticate using msal
+context = msal.AuthenticationContext(authority=authority_url,
                                      validate_authority=True,
-                                     api_version=None)
+                                     client_id=client_id)
 
 # get your authentication token
-token = context.acquire_token_with_username_password(resource=resource_url,
-                                                     client_id=client_id,
+token = context.acquire_token_by_username_password(scopes=scopes,
                                                      username=username,
                                                      password=password)
 
@@ -62,4 +61,4 @@ client.datasets.post_dataset(dataset)
 
 ### Authentication & Authorization
 
-It uses `adal` library for authentication and authorization. If you need step by step way to do auth, please refer to [this example on Bitbucket](https://bitbucket.org/omnistream/powerbi-api-example/).
+It uses `msal` library for authentication and authorization.

@@ -60,7 +60,7 @@ class CredentialsTestCase(TestCase):
     def test_o_auth_2_credentials(self):
         o_auth_2_credentials = OAuth2Credentials("eyJ0....fwtQ")
 
-        expected = r'{"credentialData":[{"name":"accessToken","value":"eyJ0....fwtQ"}]}'
+        expected = r'{"credentialData":[{"name":"access_token","value":"eyJ0....fwtQ"}]}'
         actual = o_auth_2_credentials.to_json()
 
         with self.assertRaises(ValueError):

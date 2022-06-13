@@ -83,7 +83,7 @@ class KeyCredentials(CredentialsBase):
 
 class OAuth2Credentials(CredentialsBase):
     CREDENTIAL_TYPE = CredentialType.OAUTH2
-    access_token_key = "accessToken"
+    access_token_key = "access_token"
 
     def __init__(self, access_token: str):
         super().__init__()

@@ -2,7 +2,7 @@
 
 import json
 import datetime
-import adal
+import msal
 
 from .reports import Reports
 from .datasets import Datasets
@@ -13,7 +13,7 @@ from .activity_logs import ActivityLogs
 
 
 class PowerBIClient:
-    default_resource_url = 'https://analysis.windows.net/powerbi/api'
+    default_scopes = ["https://analysis.windows.net/powerbi/api/.default"]
     default_api_url = 'https://api.powerbi.com'
     default_authority_url = 'https://login.windows.net/common'
 
@@ -21,7 +21,7 @@ class PowerBIClient:
     api_myorg_snippet = 'myorg'
 
     @staticmethod
-    def get_client_with_username_password(client_id, username, password, authority_url=None, resource_url=None, api_url=None):
+    def get_client_with_username_password(client_id, username, password, authority_url=None, scopes=None, api_url=None):
         """
         Constructs a client with the option of using common defaults.
 
@@ -29,26 +29,25 @@ class PowerBIClient:
         :param username: Username
         :param password: Password
         :param authority_url: The authority_url; defaults to 'https://login.windows.net/common'
-        :param resource_url: The resource_url; defaults to 'https://analysis.windows.net/powerbi/api'
+        :param scopes: The scopes; defaults to 'https://analysis.windows.net/powerbi/api/.default'
         :param api_url: The api_url: defaults to 'https://api.powerbi.com'
         :return:
         """
         if authority_url is None:
             authority_url = PowerBIClient.default_authority_url
 
-        if resource_url is None:
-            resource_url = PowerBIClient.default_resource_url
+        if scopes is None:
+            scopes = PowerBIClient.default_scopes
 
         if api_url is None:
             api_url = PowerBIClient.default_api_url
 
-        context = adal.AuthenticationContext(authority=authority_url,
+        context = msal.PublicClientApplication(authority=authority_url,
                                              validate_authority=True,
-                                             api_version=None)
+                                             client_id=client_id)
 
         # get your authentication token
-        token = context.acquire_token_with_username_password(resource=resource_url,
-                                                             client_id=client_id,
+        token = context.acquire_token_by_username_password(scope=scopes,
                                                              username=username,
                                                              password=password)
 
@@ -68,7 +67,7 @@ class PowerBIClient:
     def auth_header(self):
         if self._auth_header is None:
             self._auth_header = {
-                'Authorization': f'Bearer {self.token["accessToken"]}'
+                'Authorization': f'Bearer {self.token["access_token"]}'
             }
 
         return self._auth_header
@@ -130,9 +129,9 @@ class TokenRequestEncoder(json.JSONEncoder):
 
 
 class EmbedToken:
-    token_key = 'token'
-    token_id_key = 'tokenId'
-    expiration_key = 'expiration'
+    token_key = 'access_token'
+    token_id_key = 'id_token'
+    expiration_key = 'expires_in'
 
     def __init__(self, token, token_id, expiration):
         self.token = token
