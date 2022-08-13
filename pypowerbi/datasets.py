@@ -367,9 +367,11 @@ class Datasets:
         # get the response
         response = requests.post(url, headers=headers, json=json_dict)
 
-        # 200 is the only successful code, raise an exception on any other response code
+        # 202 is the only successful code, raise an exception on any other response code
         if response.status_code != 202:
             raise HTTPError(response, f'Refresh dataset request returned http error: {response.json()}')
+        
+        return {"RequestID": response.headers.get("RequestID")}
 
     def get_dataset_gateway_datasources(self, dataset_id, group_id=None):
         """
